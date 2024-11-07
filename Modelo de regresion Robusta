@@ -1,0 +1,121 @@
+install.packages("readxl")  # Solo necesitas hacerlo una vez.
+library(readxl)
+
+
+
+data <- read.csv("D:/Datos de regresion multiple/superstore.csv")
+
+
+# Verifica que los datos se han cargado correctamente.
+head(data)  # Muestra las primeras filas.
+summary(data)  # Muestra un resumen de los datos.
+
+
+
+# Ajustar el modelo
+modelo <- lm(Sales ~ Profit + Quantity, data = data)
+
+# Ver el resumen del modelo
+summary(modelo)
+
+
+# Ajustar el modelo
+modelo <- lm(Sales ~ Profit + Quantity, data = data)
+
+# Ver el resumen del modelo
+summary(modelo)
+
+
+
+install.packages("ggplot2")
+library(ggplot2)
+
+
+
+
+# Profit vs Sales
+ggplot(data, aes(x = Profit, y = Sales)) +
+  geom_point() +  # Agrega puntos
+  geom_smooth(method = "lm", se = FALSE, col = "blue") +  # Agrega línea de regresión
+  labs(title = "Relación entre Profit y Sales", x = "Profit", y = "Sales")
+
+
+
+# Quantity vs Sales
+ggplot(data, aes(x = Quantity, y = Sales)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, col = "red") +
+  labs(title = "Relación entre Quantity y Sales", x = "Quantity", y = "Sales")
+
+
+# Graficar residuos
+plot(modelo$residuals, main = "Residuos del modelo", ylab = "Residuos", xlab = "Índice")
+abline(h = 0, col = "red")
+
+
+
+
+
+
+
+
+
+
+
+
+# Seleccionar una muestra más pequeña (5% de los datos)
+set.seed(123)  # Para reproducibilidad
+data_sample <- data[sample(nrow(data), size = 0.05 * nrow(data)), ]
+
+# Ajustar el modelo de regresión con la nueva muestra
+modelo_sample <- lm(Sales ~ Profit + Quantity, data = data_sample)
+
+# Filtrar residuos dentro de un rango más manejable
+residuals_filtered <- modelo_sample$residuals[abs(modelo_sample$residuals) < 2000]
+
+# Graficar los residuos filtrados
+plot(residuals_filtered, main = "Residuos del modelo (Muestra Filtrada)",
+     ylab = "Residuos", xlab = "Índice", pch = 16, col = "blue")
+abline(h = 0, col = "red")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Instalar y cargar el paquete necesario
+if(!require(robustbase)) install.packages("robustbase")
+library(robustbase)
+
+# Ajustar el modelo de regresión robusta
+modelo_robusto <- lmrob(Sales ~ Profit + Quantity, data = data_sample)
+
+# Filtrar residuos dentro de un rango más manejable (similar al paso previo)
+residuals_filtered <- modelo_robusto$residuals[abs(modelo_robusto$residuals) < 2000]
+
+# Graficar los residuos filtrados del modelo robusto
+plot(residuals_filtered, main = "Residuos del modelo robusto (Muestra Filtrada)",
+     ylab = "Residuos", xlab = "Índice", pch = 16, col = "blue")
+abline(h = 0, col = "red")
+
+
+
+
+
+
+
+
+
+
+
+
+
